@@ -1,1 +1,6 @@
-export class CreateCarDto {}
+export class CreateCarDto {
+  licensePlate: string;
+  model: string;
+  year: string;
+  carMaker: string;
+}

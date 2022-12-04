@@ -1,4 +1,5 @@
-import { Column, CreateDateColumn, Entity, PrimaryColumn, UpdateDateColumn } from "typeorm";
+import { Driver } from "src/drivers/entities/driver.entity";
+import { Column, CreateDateColumn, Entity, JoinColumn, OneToOne, PrimaryColumn, UpdateDateColumn } from "typeorm";
 
 @Entity({ name: 'cars' })
 export class Car {
@@ -13,6 +14,10 @@ export class Car {
 
   @Column({ nullable: false, name: 'car_maker' })
   carMaker: string;
+
+  @OneToOne(() => Driver, driver => driver.licensePlate)
+  @JoinColumn()
+  driver: Driver
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: string;
