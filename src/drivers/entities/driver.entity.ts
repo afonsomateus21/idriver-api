@@ -1,5 +1,5 @@
 import { Car } from "src/cars/entities/car.entity";
-import { Column, CreateDateColumn, Entity, JoinColumn, OneToOne, PrimaryColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, OneToOne, PrimaryColumn, Unique, UpdateDateColumn } from "typeorm";
 
 @Entity({ name: 'drivers' })
 export class Driver {
@@ -18,7 +18,7 @@ export class Driver {
   @Column({ nullable: false })
   phone: string;
 
-  @Column()
+  @Column({ nullable: false, name: 'license_plate' })
   licensePlate: string;
 
   @OneToOne(() => Car, car => car.driver)
@@ -30,4 +30,7 @@ export class Driver {
 
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: string;
+
+  @DeleteDateColumn({ name: 'deleted_at' })
+  deletedAt: string;
 }

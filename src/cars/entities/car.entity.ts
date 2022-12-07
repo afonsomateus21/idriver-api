@@ -15,7 +15,7 @@ export class Car {
   @Column({ nullable: false, name: 'car_maker' })
   carMaker: string;
 
-  @OneToOne(() => Driver, driver => driver.licensePlate)
+  @OneToOne(() => Driver, driver => driver.licensePlate, {onDelete: 'CASCADE'})
   @JoinColumn()
   driver: Driver
 

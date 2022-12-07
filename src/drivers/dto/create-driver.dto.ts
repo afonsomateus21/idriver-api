@@ -6,3 +6,4 @@ export class CreateDriverDto {
   phone: string;
   licensePlate: string;
 }
+

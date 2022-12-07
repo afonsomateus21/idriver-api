@@ -17,18 +17,28 @@ export class DriversController {
     return this.driversService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.driversService.findOne(+id);
+  @Get('name/:name')
+  findByName(@Param('name') name: string) {
+    return this.driversService.findDriverByName(name);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateDriverDto: UpdateDriverDto) {
-    return this.driversService.update(+id, updateDriverDto);
+  @Get('license/:licensePlate')
+  findByLicensePlate(@Param('licensePlate') licensePlate: string) {
+    return this.driversService.findDriverByLicensePlate(licensePlate);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.driversService.remove(+id);
+  @Get('cnh/:cnh')
+  findByCnh(@Param('cnh') cnh: string) {
+    return this.driversService.findDriverByCNH(cnh);
+  }
+
+  @Patch(':cnh')
+  update(@Param('cnh') cnh: string, @Body() updateDriverDto: UpdateDriverDto) {
+    return this.driversService.updateDriver(cnh, updateDriverDto);
+  }
+
+  @Delete(':cnh')
+  remove(@Param('cnh') cnh: string) {
+    return this.driversService.removeDriver(cnh);
   }
 }

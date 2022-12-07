@@ -17,18 +17,18 @@ export class CarsController {
     return this.carsService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.carsService.findOne(+id);
+  @Get(':licensePlate')
+  findOne(@Param('licensePlate') licensePlate: string) {
+    return this.carsService.findCarByLicensePlate(licensePlate);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCarDto: UpdateCarDto) {
-    return this.carsService.update(+id, updateCarDto);
+  update(@Param('licensePlate') licensePlate: string, @Body() updateCarDto: UpdateCarDto) {
+    return this.carsService.updateCar(licensePlate, updateCarDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.carsService.remove(+id);
+  @Delete(':licensePlate')
+  remove(@Param('licensePlate') licensePlate: string) {
+    return this.carsService.removeCar(licensePlate);
   }
 }

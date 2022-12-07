@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateCarDto } from './dto/create-car.dto';
@@ -12,23 +12,39 @@ export class CarsService {
     private carsRepository: Repository<Car>
   ) {}
 
-  create(createCarDto: CreateCarDto) {
-    return 'This action adds a new car';
+  async create(createCarDto: CreateCarDto) {
+    return await this.carsRepository.save(this.carsRepository.create(createCarDto));
   }
 
-  findAll() {
-    return `This action returns all cars`;
+  async findAll() {
+    return await this.carsRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} car`;
+  async findCarByLicensePlate(licensePlate: string) {
+    try {
+      return await this.carsRepository.findOne({ where: { licensePlate: licensePlate } });
+    } catch (error) {
+      throw new NotFoundException(error.message);
+    }
   }
 
-  update(id: number, updateCarDto: UpdateCarDto) {
-    return `This action updates a #${id} car`;
+  async updateCar(licensePlate: string, updateCarDto: UpdateCarDto) {
+    try {
+      const car = await this.carsRepository.findOne({ where: { licensePlate: licensePlate } });
+      this.carsRepository.merge(car, updateCarDto);
+
+      return await this.carsRepository.save(car);
+    } catch (error) {
+      throw new NotFoundException(error.message);
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} car`;
+  async removeCar(licensePlate: string) {
+    try {
+      await this.findCarByLicensePlate(licensePlate);
+      return await this.carsRepository.softDelete(licensePlate);
+    } catch (error) {
+      throw new NotFoundException(error.message);
+    }
   }
 }

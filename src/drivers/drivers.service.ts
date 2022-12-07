@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateDriverDto } from './dto/create-driver.dto';
@@ -12,23 +12,60 @@ export class DriversService {
     private driversRepository: Repository<Driver>
   ) {}
 
-  create(createDriverDto: CreateDriverDto) {
-    return 'This action adds a new driver';
+  async create(createDriverDto: CreateDriverDto) {
+    return await this.driversRepository.save(this.driversRepository.create(createDriverDto));
   }
 
-  findAll() {
-    return `This action returns all drivers`;
+  async findAll() {
+    return await this.driversRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} driver`;
+  async findDriverByName(name: string) {
+    try {
+      const drivers = await this.driversRepository.createQueryBuilder('driver')
+        .where('driver.name like :name', { name: `%${name}%`})
+        .getMany()
+
+      return drivers;
+    } catch (error) {
+      throw new NotFoundException(error.message);
+    }
   }
 
-  update(id: number, updateDriverDto: UpdateDriverDto) {
-    return `This action updates a #${id} driver`;
+  async findDriverByLicensePlate(licensePlate: string) {
+    try {
+      return await this.driversRepository.findOne({ where: { licensePlate: licensePlate } });
+    } catch (error) {
+      throw new NotFoundException(error.message);
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} driver`;
+  async findDriverByCNH(cnh: string) {
+    try {
+      return await this.driversRepository.findOne({ where: { cnh: cnh } });
+    } catch (error) {
+      throw new NotFoundException(error.message);
+    }
+  }
+
+  async updateDriver(cnh: string, updateDriverDto: UpdateDriverDto) {
+    try {
+      const driver = await this.driversRepository.findOne({ where: { cnh: cnh } });
+
+      this.driversRepository.merge(driver, updateDriverDto);
+      return await this.driversRepository.save(driver);
+    } catch (error) {
+      throw new NotFoundException();
+    }
+  }
+
+  async removeDriver(cnh: string) {
+    // try {
+      
+    // } catch (error) {
+    //   throw new NotFoundException(error.message);
+    // }
+    await this.findDriverByCNH(cnh);
+    await this.driversRepository.softDelete(cnh);
   }
 }
