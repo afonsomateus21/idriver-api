@@ -22,7 +22,7 @@ export class CarsController {
     return this.carsService.findCarByLicensePlate(licensePlate);
   }
 
-  @Patch(':id')
+  @Patch(':licensePlate')
   update(@Param('licensePlate') licensePlate: string, @Body() updateCarDto: UpdateCarDto) {
     return this.carsService.updateCar(licensePlate, updateCarDto);
   }

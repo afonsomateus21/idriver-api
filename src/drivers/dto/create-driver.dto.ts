@@ -5,5 +5,8 @@ export class CreateDriverDto {
   email: string;
   phone: string;
   licensePlate: string;
+  model: string;
+  year: string;
+  carMaker: string;
 }
 

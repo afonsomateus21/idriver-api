@@ -21,6 +21,15 @@ export class Driver {
   @Column({ nullable: false, name: 'license_plate' })
   licensePlate: string;
 
+  @Column({ nullable: false })
+  model: string;
+
+  @Column({ nullable: false })
+  year: string;
+
+  @Column({ nullable: false, name: 'car_maker' })
+  carMaker: string;
+
   @OneToOne(() => Car, car => car.driver)
   @JoinColumn()
   car: Car;
